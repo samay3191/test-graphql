@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('#btnGreeting').click(function() {
+                    $('#divGreeting').html('Loading...');
+                    $.ajax({
+                        url: "http://localhost:9000/graphql",
+                        contentType: "application/json",
+                        type: 'POST',
+                        data: JSON.stringify({
+                            query:`{greeting}`
+                        }),
+                        success: function(result) {
+                            $('#divGreeting').html("<h1>"+result.data.greeting+"</h1>")
+                        }
+                    });
+                });
+
+                $('#btnSayHello').click(function() {
+
+                    const name = $('#txtName').val();
+                    console.log(name);
+
+                    $('#divSayHello').html('Loading...');
+                    $.ajax({
+                        url: "http://localhost:9000/graphql",
+                        contentType: "application/json",
+                        type: 'POST',
+                        data: JSON.stringify({
+                            query:`{
+                                sayHello(name:"${name}")
+                            }`
+                        }),
+                        success: function(result) {
+                            $('#divSayHello').html("<h1>"+result.data.sayHello+"</h1>")
+                        }
+                    });
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <h1>Test Jquery Client - By Samay</h1>
+        <hr/>
+        <section>
+            <button id="btnGreeting">Greet</button>
+            <br/><br/>
+            <div id="divGreeting"></div>
+        </section>
+        
+        <br/><br/><br/>
+        <hr/>
+
+        <section>
+            <label for="txtName">Enter a name:</label>
+            <input id="txtName" type="text" value="Samay" />
+            <button id="btnSayHello">Say Hello!</button>
+            <div id="divSayHello"></div>
+        </section>
+    </body>
+</html>
